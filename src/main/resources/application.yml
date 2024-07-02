@@ -7,7 +7,7 @@ spring:
     name: springstudy
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/springstudy?serverTimezone=Asia/Seoul&useUnicode=true
+    url: jdbc:mysql://localhost:3306/study?serverTimezone=Asia/Seoul&useUnicode=true
     username: root
     password: sungwoo
   jpa:
