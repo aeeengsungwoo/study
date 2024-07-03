@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 @Entity @Getter
 @NoArgsConstructor
 @Table(name = "orders")
@@ -13,7 +15,7 @@ public class Order {
     @GeneratedValue
     private Long orderId;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

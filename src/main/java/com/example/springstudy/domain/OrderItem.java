@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 @Entity @Getter
 @NoArgsConstructor
 public class OrderItem {
@@ -11,11 +13,11 @@ public class OrderItem {
     @GeneratedValue
     private Long orderItemId;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "order_id")
     private Order orderId;
 
