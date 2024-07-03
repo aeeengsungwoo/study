@@ -17,7 +17,6 @@ public class UserController {
     @GetMapping("/user/modify/")
     public void modifyName(@RequestBody UserDto dto){
         userService.saveUser(dto);
-
     }
 
 //    @GetMapping("/user/create/")
