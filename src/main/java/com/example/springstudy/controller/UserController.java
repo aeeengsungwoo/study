@@ -1,6 +1,9 @@
 package com.example.springstudy.controller;
 
-import com.example.springstudy.dto.UserDto;
+import com.example.springstudy.dto.request.UserJoinRequestDto;
+import com.example.springstudy.dto.request.UserRequestDto;
+import com.example.springstudy.dto.response.UserResponseDto;
+import com.example.springstudy.dto.response.ResponseData;
 import com.example.springstudy.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -10,19 +13,20 @@ public class UserController {
 
     private final UserService userService;
     @GetMapping("/topbar/username/")
-    public String findUserName(@RequestBody UserDto dto){
-        return userService.findById(dto.getId()).getNickname();
+    public ResponseData<UserResponseDto> findUserName(@RequestBody UserRequestDto dto){
+        return new ResponseData<>(200, "유저 닉네임",userService.findById(dto));
     }
 
-    @GetMapping("/user/modify/")
-    public void modifyName(@RequestBody UserDto dto){
-        userService.saveUser(dto);
+    @PostMapping("/user/join/")
+    public ResponseData<UserResponseDto> join(@RequestBody UserJoinRequestDto dto){
+        userService.save(dto);
+        return new ResponseData<>(200, "회원가입 완료",userService.findByName(dto));
+    }
+    @PostMapping("/user/update/")
+    public ResponseData<UserResponseDto> modifyNickName(@RequestBody UserRequestDto dto){
+        userService.update(dto);
+        return new ResponseData<>(200, "닉네임 수정",userService.findById(dto));
     }
 
-//    @GetMapping("/user/create/")
-//    public String join(@RequestBody UserDto dto){
-//        userService.join(dto);
-//        return userService.findById(dto.getId()).getNickname();
-//    }
 
 }

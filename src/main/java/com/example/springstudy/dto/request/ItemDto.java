@@ -1,4 +1,4 @@
-package com.example.springstudy.dto;
+package com.example.springstudy.dto.request;
 
 import com.example.springstudy.domain.Item;
 import lombok.AllArgsConstructor;

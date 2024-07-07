@@ -14,15 +14,15 @@ public class Item {
 
     @Id @GeneratedValue @Column(name = "item_id")
     private Long id;
-
+    @Column(nullable = false)
     private String itemName;
-
+    @Column
     private Long itemPrice;
-
+    @Column
     private Long itemAmount;
-
+    @Column
     private String itemImageUrl;
-
+    @Column
     private String updateAt;
 
 }

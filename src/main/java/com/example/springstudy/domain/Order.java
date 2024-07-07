@@ -15,7 +15,7 @@ public class Order {
     @GeneratedValue
     private Long orderId;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
