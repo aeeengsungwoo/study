@@ -4,6 +4,8 @@ import com.example.springstudy.domain.User;
 import com.example.springstudy.dto.request.UserJoinRequestDto;
 import com.example.springstudy.dto.request.UserRequestDto;
 import com.example.springstudy.dto.response.UserResponseDto;
+import com.example.springstudy.exception.ApiException;
+import com.example.springstudy.exception.ErrorDefine;
 import com.example.springstudy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,26 +20,20 @@ public class UserService {
     @Transactional
     public void save(UserJoinRequestDto userJoinRequestDto){
         if (userRepository.existsByNickname(userJoinRequestDto.getNickname())){
-            throw new IllegalStateException("이미 존재하는 닉네임입니다.");
+            throw new ApiException(ErrorDefine.USER_EXIST);
         }else{
             User user = User.builder()
                     .nickname(userJoinRequestDto.getNickname())
                     .password(userJoinRequestDto.getPassword())
                     .build();
             userRepository.save(user);
-
         }
     }
-//    @Transactional
-//    public void update(UserRequestDto userRequestDto){
-//        User user = userRepository.findById(userRequestDto.getId())
-//                .orElseThrow();
-//        user.update();
-//    }
+
     @Transactional
     public UserResponseDto update(UserRequestDto userRequestDto) {
         User user = userRepository.findById(userRequestDto.getId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new ApiException(ErrorDefine.USER_NOT_FOUND));
 
         user.update(userRequestDto.getNickname());
 
@@ -48,9 +44,10 @@ public class UserService {
                 .build();
         return userResponseDto;
     }
+
     public UserResponseDto findByName(UserJoinRequestDto userJoinRequestDto) {
         User user = userRepository.findByNickname(userJoinRequestDto.getNickname())
-                .orElseThrow();
+                .orElseThrow(() -> new ApiException(ErrorDefine.USER_NOT_FOUND));
 
         UserResponseDto userResponseDto = UserResponseDto.builder()
                 .nickname(user.getNickname())
@@ -61,13 +58,12 @@ public class UserService {
 
     public UserResponseDto findById(UserRequestDto userRequestDto) {
         User user = userRepository.findById(userRequestDto.getId())
-                .orElseThrow();
+                .orElseThrow(() -> new ApiException(ErrorDefine.USER_NOT_FOUND));
+
         UserResponseDto userResponseDto = UserResponseDto.builder()
                 .nickname(user.getNickname())
                 .build();
         return userResponseDto;
     }
-
-
 
 }
