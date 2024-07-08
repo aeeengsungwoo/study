@@ -13,19 +13,19 @@ public class UserController {
 
     private final UserService userService;
     @GetMapping("/topbar/username/")
-    public ResponseDto<UserResponseDto> findUserName(@RequestBody UserRequestDto dto){
-        return new ResponseDto<>(userService.findById(dto));
+    public ResponseDto<UserResponseDto> findUserName(@RequestBody UserRequestDto userRequestDto){
+        return new ResponseDto<>(userService.findById(userRequestDto));
     }
 
     @PostMapping("/user/join/")
-    public ResponseDto<UserResponseDto> join(@RequestBody UserJoinRequestDto dto){
-        userService.save(dto);
-        return new ResponseDto<>(userService.findByName(dto));
+    public ResponseDto<UserResponseDto> join(@RequestBody UserJoinRequestDto userJoinRequestDto){
+        userService.save(userJoinRequestDto);
+        return new ResponseDto<>(userService.findByName(userJoinRequestDto));
     }
 
     @PostMapping("/user/update/")
-    public ResponseDto<UserResponseDto> modifyNickName(@RequestBody UserRequestDto dto){
-        UserResponseDto updatedUser = userService.update(dto); // 업데이트된 사용자 정보 받아옴
+    public ResponseDto<UserResponseDto> modifyNickName(@RequestBody UserRequestDto userRequestDto){
+        UserResponseDto updatedUser = userService.update(userRequestDto); // 업데이트된 사용자 정보 받아옴
         return new ResponseDto<>(updatedUser);
     }
 

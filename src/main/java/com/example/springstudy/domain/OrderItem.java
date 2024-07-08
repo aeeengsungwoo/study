@@ -1,6 +1,7 @@
 package com.example.springstudy.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,9 @@ public class OrderItem {
     private Order orderId;
 
     private Long orderItemAmount;
+
+
+    public Long getItemId() {
+        return item.getId();
+    }
 }
