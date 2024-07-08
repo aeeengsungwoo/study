@@ -24,8 +24,8 @@ public class UserController {
     }
     @PostMapping("/user/update/")
     public ResponseData<UserResponseDto> modifyNickName(@RequestBody UserRequestDto dto){
-        userService.update(dto);
-        return new ResponseData<>(200, "닉네임 수정",userService.findById(dto));
+        UserResponseDto updatedUser = userService.update(dto); // 업데이트된 사용자 정보 받아옴
+        return new ResponseData<>(200, "닉네임 수정",updatedUser);
     }
 
 

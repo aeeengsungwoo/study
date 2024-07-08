@@ -41,8 +41,7 @@ public class User {
         this.updateAt = updateAt;
     }
 
-    public void update(){
-        this.nickname = getNickname();
-
+    public void update(String newNickname) { // 변경할 닉네임을 파라미터로 받음
+        this.nickname = newNickname; // 닉네임 필드를 직접 변경
     }
 }
