@@ -32,7 +32,8 @@ public class OrderService {
                 .orElseThrow(() -> new ApiException(ErrorDefine.ORDER_NOT_FOUND));
 
         // 2. 주문 ID로 주문 항목 엔티티 조회 (OrderItemRepository 사용)
-        List<OrderItem> orderItems = orderItemRepository.findByOrderId(orderId);
+        List<OrderItem> orderItems = orderItemRepository.findByOrderId(order);
+        // orderId는 Long이기 때문에 order를 넣어줘야함 + findByOrderId쿼리문에서 반환 타입을 Order로 해줘야함
 
         // 3. 주문 항목 엔티티에서 아이템 ID 추출
         List<Long> itemIds = orderItems.stream()
@@ -54,11 +55,13 @@ public class OrderService {
                 .collect(Collectors.toList());
 
         // 6. OrderResponseDto 생성 및 반환
-        return OrderResponseDto.builder()
+        OrderResponseDto orderResponseDto = OrderResponseDto.builder()
                 .orderId(order.getOrderId())
                 // 필요한 다른 주문 정보 추가 (예: 주문 날짜, 총 금액 등)
                 .items(itemResponseDtos) // 아이템 정보 리스트 포함
                 .build();
+
+        return orderResponseDto;
     }
 
 }

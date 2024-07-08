@@ -20,7 +20,7 @@ public class OrderItem {
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
-    private Order orderId;
+    private Order orderId; // 이게 Order객체로 되어있어서 Long 값으로 이 값을 조회할 수가 없음
 
     private Long orderItemAmount;
 

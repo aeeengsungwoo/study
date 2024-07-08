@@ -17,7 +17,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("/order/{orderId}")
+    @GetMapping("/order/{orderId}/")
     public ResponseDto<OrderResponseDto> findItemByOrderId(@PathVariable("orderId") Long orderId) {
         OrderResponseDto orderResponseDto = orderService.findItemByOrderId(orderId); // 주문 ID로 조회
         return new ResponseDto<>(orderResponseDto); // 조회된 결과 반환
