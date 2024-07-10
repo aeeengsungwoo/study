@@ -1,20 +1,24 @@
 package com.example.springstudy.service;
 
-import com.example.springstudy.domain.Order;
-import com.example.springstudy.domain.OrderItem;
-import com.example.springstudy.domain.Item;
+import com.example.springstudy.domain.*;
+import com.example.springstudy.dto.request.OrderCreateRequestDto;
 import com.example.springstudy.dto.response.ItemResponseDto;
+import com.example.springstudy.dto.response.OrderCreateResponseDto;
 import com.example.springstudy.dto.response.OrderResponseDto;
 import com.example.springstudy.exception.ApiException;
 import com.example.springstudy.exception.ErrorDefine;
 import com.example.springstudy.repository.ItemRepository;
 import com.example.springstudy.repository.OrderItemRepository;
 import com.example.springstudy.repository.OrderRepository;
+import com.example.springstudy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +29,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
 
     public OrderResponseDto findItemByOrderId(Long orderId) {
         // 1. 주문 ID로 주문 엔티티 조회 (OrderRepository 사용)
@@ -63,5 +68,48 @@ public class OrderService {
 
         return orderResponseDto;
     }
+
+    public OrderCreateResponseDto orderCreate(OrderCreateRequestDto orderCreateRequestDto){
+        // 1. 주문 빌드, 저장
+        User user = userRepository.findById(orderCreateRequestDto.getUserId())
+                .orElseThrow(() -> new ApiException(ErrorDefine.USER_NOT_FOUND));
+
+        Order order = Order.builder()
+                .userId(user) // User 엔티티와의 연관관계 설정
+                .totalPrice(orderCreateRequestDto.getTotalPrice()) // total price 계산 로직 추가 필요
+                .totalAmount(orderCreateRequestDto.getTotalAmount())
+                .status(OrderStatus.ORDER) // 초기 주문 상태 설정
+                .build();
+
+        Order savedOrder = orderRepository.save(order);
+
+        // 2. orderItem 빌드, 저장
+        List<OrderItem> orderItems = orderCreateRequestDto.getOrderItems().stream()
+                .map(itemRequestDto -> {
+                    Item item = itemRepository.findById(itemRequestDto.getItemId())
+                            .orElseThrow(() -> new ApiException(ErrorDefine.ITEM_NOT_FOUND));
+
+                    return OrderItem.builder()
+                            .orderId(savedOrder) // 위에서 save한 order의 ID참조
+                            .item(item)
+                            .orderItemAmount(itemRequestDto.getItemAmount())
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        orderItemRepository.saveAll(orderItems);
+
+        // 3. OrderCreateResponseDto 생성 및 반환
+        OrderCreateResponseDto orderCreateResponseDto = OrderCreateResponseDto.builder()
+                .orderId(savedOrder.getOrderId()) // 저장된 주문의 ID 사용
+                .userId(savedOrder.getUserId().getUserId()) // 연관관계를 통해 User ID 가져오기
+                .totalPrice(savedOrder.getTotalPrice())
+                .totalAmount(savedOrder.getTotalAmount())
+                .status(savedOrder.getStatus())
+                .build();
+
+        return orderCreateResponseDto;
+    }
+
 
 }

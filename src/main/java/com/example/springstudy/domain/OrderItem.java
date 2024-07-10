@@ -28,4 +28,11 @@ public class OrderItem {
     public Long getItemId() {
         return item.getId();
     }
+    @Builder(toBuilder = true)
+    public OrderItem(Long orderItemId, Item item, Order orderId, Long orderItemAmount) {
+        this.orderItemId = orderItemId;
+        this.item = item;
+        this.orderId = orderId;
+        this.orderItemAmount = orderItemAmount;
+    }
 }
