@@ -11,7 +11,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserItem {
 
-    @Id @GeneratedValue @Column(name = "basket_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "basket_id")
     private Long Id;
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)

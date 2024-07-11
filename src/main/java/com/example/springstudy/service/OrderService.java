@@ -14,11 +14,7 @@ import com.example.springstudy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +31,7 @@ public class OrderService {
         // 1. 주문 ID로 주문 엔티티 조회 (OrderRepository 사용)
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ApiException(ErrorDefine.ORDER_NOT_FOUND));
-
+        System.err.println(order.getStatus().getToKorea());
         // 2. 주문 ID로 주문 항목 엔티티 조회 (OrderItemRepository 사용)
         List<OrderItem> orderItems = orderItemRepository.findByOrderId(order);
         // orderId는 Long이기 때문에 order를 넣어줘야함 + findByOrderId쿼리문에서 반환 타입을 Order로 해줘야함
@@ -68,7 +64,7 @@ public class OrderService {
 
         return orderResponseDto;
     }
-
+    @Transactional
     public OrderCreateResponseDto orderCreate(OrderCreateRequestDto orderCreateRequestDto){
         // 1. 주문 빌드, 저장
         User user = userRepository.findById(orderCreateRequestDto.getUserId())

@@ -11,7 +11,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @NoArgsConstructor
 public class OrderItem {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderItemId;
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)

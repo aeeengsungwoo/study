@@ -15,7 +15,7 @@ import static jakarta.persistence.FetchType.LAZY;
 public class Order {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
@@ -30,9 +30,9 @@ public class Order {
     private Long totalAmount;
 
     private Long totalPrice;
+
     @Builder(toBuilder = true)
-    public Order(Long orderId, User userId, OrderStatus status, LocalDate createAt, Long totalAmount, Long totalPrice) {
-        this.orderId = orderId;
+    public Order(User userId, OrderStatus status, Long totalAmount, Long totalPrice) {
         this.userId = userId;
         this.status = status;
         this.createAt = LocalDate.now();
